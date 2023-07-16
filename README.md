@@ -39,6 +39,7 @@ All that is needed is the prefix name of the prefix.str file, since the locus na
 ### The \*.pos file
 This is a custom format that I use for various scripts. It is a simple two-column list of loci and sites in order of the fasta file from left to right that could look like this:
 
+|      |      |
 |------|------|
 |group1|294708|
 |group1|297223|
