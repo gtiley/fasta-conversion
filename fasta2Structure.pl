@@ -3,6 +3,7 @@ use strict;
 #----------------------------------------------------------------------------------------#
 #George P. Tiley
 #26 April 2022
+#updated 19 July 2023 to be less restrictive on partition file format
 #contact: g.tiley@kew.org
 #Convert fasta file to Structure format
 #----------------------------------------------------------------------------------------#
@@ -154,7 +155,23 @@ my %coords = ();
 my $site = 0;
 if ($coordfile ne "0")
 {
-	if ($coordfile =~ m/\S+\.raxml/)
+	if ($coordfile =~ m/\S+\.pos/)
+	{
+		open FH1,'<',"$coordfile";
+		while(<FH1>)
+		{
+			if (/(\S+)\s+(\S+)/)
+			{
+				my $chromosome = $1;
+				my $position = $2;
+				$coords{chrom}{$site} = $chromosome;
+				$coords{position}{$site} = $position;
+				$site++;
+			}
+		}
+		close FH1;
+	}
+	else
 	{
 		#DNA, L1.leftFlank = 1-365
 		open FH1,'<',"$coordfile";
@@ -171,22 +188,6 @@ if ($coordfile ne "0")
 					$coords{position}{$site} = $position;
 					$site++;
 				}
-			}
-		}
-		close FH1;
-	}
-	else
-	{
-		open FH1,'<',"$coordfile";
-		while(<FH1>)
-		{
-			if (/(\S+)\s+(\S+)/)
-			{
-				my $chromosome = $1;
-				my $position = $2;
-				$coords{chrom}{$site} = $chromosome;
-				$coords{position}{$site} = $position;
-				$site++;
 			}
 		}
 		close FH1;
@@ -443,7 +444,7 @@ for my $i (0..($site - 1))
 	$locusLabelPrefix =~ s/\_//g;
 #	$locusLabelPrefix =~ s/\-//g;
 	$locusLabelPrefix =~ s/\.//g;
-	my $locusLabel = "$locusLabelPrefix" . "_" . "$coords{position}{$i}";
+	my $locusLabel = "$locusLabelPrefix" . "__" . "$coords{position}{$i}";
 	if ($countedSNPs == 0 && $biallelicSites[$i] == 1)
 	{
 		print OUT1 "$locusLabel";
@@ -690,7 +691,7 @@ for my $i (0..($site - 1))
 	$locusLabelPrefix =~ s/\_//g;
 #	$locusLabelPrefix =~ s/\-//g;
 	$locusLabelPrefix =~ s/\.//g;
-	my $locusLabel = "$locusLabelPrefix" . "_" . "$coords{position}{$i}";
+	my $locusLabel = "$locusLabelPrefix" . "__" . "$coords{position}{$i}";
 	if ($countedSNPs == 0 && $biallelicSites[$i] == 1)
 	{
 		print OUT1 "$locusLabel";

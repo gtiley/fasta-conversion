@@ -19,7 +19,7 @@ while (<FH1>)
 	{
 		for $i (0..(scalar(@temp)-1))
 		{
-			if ($temp[$i] =~ m/(\S+)\_\d+/)
+			if ($temp[$i] =~ m/(\S+)\_\_\d+/)
 			{
 				
 				$chr = $1;
